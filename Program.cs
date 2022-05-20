@@ -1,4 +1,6 @@
 using Auth.Data;
+using Auth.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +10,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddIdentity<ApplicationUserEntity, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
